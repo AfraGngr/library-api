@@ -20,8 +20,8 @@ import Book from "./bookModel";
 import User from "./userModel";
 import BorrowedBook from "./borrowedBooks";
 
-User.belongsToMany(Book, { through: BorrowedBook })
-Book.belongsToMany(User, { through: BorrowedBook, as: 'borrowed' })
+User.belongsToMany(Book, { through: { model: BorrowedBook, unique: false } })
+Book.belongsToMany(User, { through: { model: BorrowedBook, unique: false }, as: 'borrowed' })
 
 export {
     Book,

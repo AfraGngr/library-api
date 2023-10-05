@@ -2,6 +2,7 @@ import { DataTypes, InferAttributes, InferCreationAttributes, Model } from "sequ
 import db from "./index";
 
 export interface BorrowedBookModel extends Model<InferAttributes<BorrowedBookModel>, InferCreationAttributes<BorrowedBookModel>> {
+    id?: number
     userId?: number
     bookId?: number
     score?: number
@@ -10,6 +11,12 @@ export interface BorrowedBookModel extends Model<InferAttributes<BorrowedBookMod
 
 export const BorrowedBook = db.define<BorrowedBookModel>('borrowedBook',
     {
+        id: {
+            type: DataTypes.INTEGER,
+            primaryKey: true,
+            allowNull: false,
+            autoIncrement: true,
+        },
         score: {
             type: DataTypes.INTEGER,
             allowNull: true,

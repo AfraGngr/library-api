@@ -54,6 +54,8 @@ export class UserService {
             }
         ) as [ISingleUser, unknown]
 
+        if (!data) throw new AppError(404, 'User not found.')
+
         return data
     }
 
@@ -71,16 +73,20 @@ export class UserService {
         if (!userExist) throw new AppError(400, 'There is no such user.')
 
         const bookExist = await Book.findByPk(bookId)
-        if (!bookExist) throw new AppError(400, 'Book can not be found.')
+        if (!bookExist) throw new AppError(400, 'Book not found.')
 
         const bookBorrowed = await BorrowedBook.findOne({
             where: {
                 bookId,
                 returned: false
-            }
+            },
+            attributes: ['userId']
         })
 
-        if (bookBorrowed) throw new AppError(400, 'This book has already been borrowed.')
+        if (bookBorrowed) {
+            if (bookBorrowed.userId === userId) throw new AppError(400, 'You have already borrowed this book.')
+            throw new AppError(400, 'This book has already been borrowed.')
+        }
 
         await BorrowedBook.create({
             userId,

@@ -39,6 +39,9 @@ export class BookService {
             ]
         })
 
+
+        if (!data) throw new AppError(404, 'The book not found.')
+
         return data
     }
 
