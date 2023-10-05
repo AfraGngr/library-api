@@ -103,15 +103,17 @@ export class UserService {
         const bookExist = await Book.findByPk(bookId)
         if (!bookExist) throw new AppError(400, 'Book can not be found.')
 
-        const returned = await BorrowedBook.findOne({
+        const borrowed = await BorrowedBook.findAll({
             where: {
                 userId,
                 bookId,
-                returned: true
-            }
+            },
+            order: [['id', 'DESC']]
         })
 
-        if (returned) throw new AppError(400, 'You have already returned this book.')
+        const lastBorrowed = borrowed.shift()
+
+        if (lastBorrowed?.returned) throw new AppError(400, 'You have already returned this book.')
 
         await BorrowedBook.update(
             {
@@ -120,8 +122,7 @@ export class UserService {
             },
             {
                 where: {
-                    userId,
-                    bookId
+                    id: lastBorrowed?.id
                 }
             }
         )
