@@ -10,7 +10,7 @@ export const getBooks: RequestHandler = catchAsync(async (req, res) => {
 })
 
 export const getBookById: RequestHandler = catchAsync(async (req, res) => {
-    const data = await bookService.getBookById(+req.params.id)
+    const data = await bookService.getBookById(+req.params.bookId)
     res.status(200).send(data)
 })
 

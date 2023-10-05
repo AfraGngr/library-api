@@ -20,7 +20,7 @@ export class UserService {
         return data
     }
 
-    public async getUserById(id: number): Promise<ISingleUser> {
+    public async getUserById(id: number): Promise<ISingleUser | null> {
         const [data] = await db.query(`
             SELECT 
                 u.id,
@@ -73,6 +73,15 @@ export class UserService {
         const bookExist = await Book.findByPk(bookId)
         if (!bookExist) throw new AppError(400, 'Book can not be found.')
 
+        const bookBorrowed = await BorrowedBook.findOne({
+            where: {
+                bookId,
+                returned: false
+            }
+        })
+
+        if (bookBorrowed) throw new AppError(400, 'This book has already been borrowed.')
+
         await BorrowedBook.create({
             userId,
             bookId,
@@ -97,8 +106,6 @@ export class UserService {
         })
 
         if (returned) throw new AppError(400, 'You have already returned this book.')
-
-        if (score === undefined || score === null) throw new AppError(400, 'You must score the book !')
 
         await BorrowedBook.update(
             {

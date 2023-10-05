@@ -10,7 +10,7 @@ export const getUsers: RequestHandler = catchAsync(async (req, res) => {
 })
 
 export const getUserById: RequestHandler = catchAsync(async (req, res) => {
-    const data = await userService.getUserById(+req.params.id)
+    const data = await userService.getUserById(+req.params.userId)
     res.status(200).send(data)
 })
 

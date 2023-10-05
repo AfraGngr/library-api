@@ -16,7 +16,7 @@ export class BookService {
         return data
     }
 
-    public async getBookById(id: number): Promise<ISingleBook> {
+    public async getBookById(id: number): Promise<ISingleBook | null> {
         const data: ISingleBook | null = await Book.findOne({
             where: { id },
             attributes: [
@@ -39,7 +39,7 @@ export class BookService {
             ]
         })
 
-        return data!
+        return data
     }
 
     public async createBook(name: string): Promise<{}> {
