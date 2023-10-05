@@ -20,7 +20,8 @@ export const User = db.define<UserModel>('user',
                     msg: 'Name must be between 1 and 50 characters.'
                 }
 
-            }
+            },
+            unique: true
         }
     },
     {
