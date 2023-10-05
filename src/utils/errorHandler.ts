@@ -37,7 +37,6 @@ export default class ErrorHandler {
 
     static handle = () => {
         return async (err: AppError, req: Request, res: Response, next: NextFunction) => {
-            // clear cookie if authorized
             if (process.env.NODE_ENV === 'production') {
                 this.sendErrorProd(err, req, res)
             } else {
@@ -90,9 +89,7 @@ export default class ErrorHandler {
             console.log("-------------stack----------------")
             console.log(err.stack)
             console.log("💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥💥")
-            // check if the headers is sent
             if (!res.headersSent) {
-                // send generic message
                 res.status(500).send({
                     status: 'error',
                     message: 'Something went very wrong!'
@@ -102,14 +99,12 @@ export default class ErrorHandler {
     }
 
     private static convertValidationError = (error: ValidationError) => {
-        // create a custom message for Sequelize validation errors
         let concattedMessage = error.errors.map((e: ValidationErrorItem) => e.message).join('. ')
         error.message = `Invalid input: ${concattedMessage}`
         return error
     }
 
     private static convertUniqueConstraintError = (error: UniqueConstraintError) => {
-        // create a custom message for Sequelize validation errors
         let concattedMessage = error.errors.map((e: ValidationErrorItem) => e.message).join('. ')
         error.message = `${concattedMessage}`
         return error

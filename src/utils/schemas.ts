@@ -3,7 +3,7 @@ import { z } from "zod"
 export const userSchema = z.object({
     name: z
         .string({ required_error: 'Name is required.', invalid_type_error: 'You must enter a valid name' })
-        .min(2, { message: 'Name contain at least 2 character' })
+        .min(2, { message: 'Name contain at least 2 characters' })
         .max(30)
 })
 
